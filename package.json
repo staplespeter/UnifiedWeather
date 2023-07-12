@@ -1,0 +1,37 @@
+{
+  "name": "payrocdemo",
+  "version": "1.0.0",
+  "description": "Weather aggregator",
+  "main": "./src/index.js",
+  "scripts": {
+    "clean": "rm -rf ./build",
+    "test": "jest",
+    "build": "tsc --build && ts-add-js-extension --dir=build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/staplespeter/PayrocDemo.git"
+  },
+  "author": "Peter Staples",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/staplespeter/PayrocDemo/issues"
+  },
+  "homepage": "https://github.com/staplespeter/PayrocDemo#readme",
+  "devDependencies": {
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/jest": "^29.5.3",
+    "jest": "^29.6.1",
+    "ts-add-js-extension": "^1.5.4",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "winston": "^3.10.0",
+    "winston-daily-rotate-file": "^4.7.1"
+  }
+}
