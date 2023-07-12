@@ -24,10 +24,30 @@ namespace UW {
     }
     type Result = {
         error?: string;
-        data?: Data[];
+        data?: DataSourceResponse[];//Data[];
     }
 
-    
+
+    type DatasourceName = "WeatherAPI" | "OpenMeteo";
+    type DatasourceResponseFormat = "JSON" | "XML" | "CSV";
+    type DatasourceSystemParams = {
+        [key: string]: string | number;
+    }
+    type DatasourceUWApiParams = {
+        [key: string]: keyof QueryParams;
+    }
+    type DatasourceParams = {
+        system: DatasourceSystemParams;
+        uwApi: DatasourceUWApiParams;
+    }
+    type DatasourceConfig = {
+        name: DatasourceName;
+        url: URL;
+        format: DatasourceResponseFormat;
+        params: DatasourceParams;
+    }
+
+
     type WeatherApiResponseLocation = {
         lat: number;
         lon: number;
@@ -69,11 +89,19 @@ namespace UW {
         hourly_units: OpenMeteoResponseHourlyUnits;  //needed??
     }
 
+    type DataSourceResponse = WeatherApiResponse | OpenMeteoResponse;
 
-    interface IDataSource {
-        get(params: QueryParams): Promise<Data[]>;
+
+    interface IDataSource<T> {
+        configuration: UW.DatasourceConfig;
+        getResponse(config: UW.DatasourceConfig): Promise<T>;
+        get(params: QueryParams): Data[];
     }
     interface IDataOptimiser {
         optimise(data: Array<Data[]>): Data[];
+    }
+    interface Chainable {
+        next
+        next
     }
 }

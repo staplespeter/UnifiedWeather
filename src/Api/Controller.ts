@@ -1,8 +1,23 @@
+import ConfigurationManager from "./ConfigurationManager";
 import DataSourceFactory from "./DatasourceFactory";
 import UnifiedWeather from "./UnifiedWeather";
 
 export default class Controller {
-    static async getUWData(params: UW.QueryParams): Promise<UW.Result> {
+    configurationManager: ConfigurationManager;
+    datasourceFactory: DataSourceFactory;
+    unifiedWeather: UnifiedWeather;
+
+    constructor() {
+        this.configurationManager = new ConfigurationManager();
+        this.datasourceFactory = new DataSourceFactory();
+        this.unifiedWeather = new UnifiedWeather(this.configurationManager, this.datasourceFactory, null);
+    }
+
+    async init() {
+        await this.unifiedWeather.init();
+    }
+
+    async getUWData(params: UW.QueryParams): Promise<UW.Result> {
         const result: UW.Result = {};
 
         try {
@@ -14,7 +29,7 @@ export default class Controller {
             }            
             else {
                 params.days = params.days ?? 7;
-                result.data = await (new UnifiedWeather(null, null)).get(params);
+                result.data = await this.unifiedWeather.get(params);
             }
         }
         catch (err) {

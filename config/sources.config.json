@@ -1,0 +1,51 @@
+{
+    "sources": [
+        {
+            "name": "WeatherAPI",
+            "url": "https://api.weatherapi.com/v1/forecast.json",
+            "format": "json",
+            "params": {
+                "system": {
+                    "key": "d652ae67e93f497f844231406231007"
+                },
+                "uwApi": {
+                    "q": "${latitude},${longitude}",
+                    "days": "${days}"
+                }
+            }
+        },
+        {
+            "name": "TimeZoneDB",
+            "url": "http://api.timezonedb.com/v2.1/get-time-zone",
+            "format": "json",
+            "params": {
+                "system": {
+                    "key": "JIUTI9LUXQ11",
+                    "format": "json",
+                    "by": "position"
+                },
+                "uwApi": {
+                    "lat": "${latitude}",
+                    "lng": "${longitude}"
+                }
+            }
+        },
+        {
+            "name": "OpenMeteo",
+            "url": "https://api.open-meteo.com/v1/forecast",
+            "format": "json",
+            "params": {
+                "system": {
+                    "hourly": "temperature_2m,windspeed_10m,winddirection_10m,precipitation_probability",
+                    "windspeed_unit": "mph",
+                    "timeformat": "unixtime"
+                },
+                "uwApi": {
+                    "latitude": "${latitude}",
+                    "longitude": "${longitude}",
+                    "forecast_days": "${days}"
+                }
+            }
+        }
+    ]
+}

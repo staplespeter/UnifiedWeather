@@ -2,7 +2,7 @@ import express, { ErrorRequestHandler } from "express";
 import cors from 'cors';
 import http from 'http';
 import fs from 'fs';
-import AuthRoutes from "./Api/Routes";
+import Routes from "./Api/Routes";
 import winston from "winston";
 import winstonDailyFileTransport from 'winston-daily-rotate-file';
 
@@ -33,7 +33,9 @@ export default class Server {
             port ?? (!Number.isNaN(Number.parseInt(process.env.port ?? process.env.API_PORT)) ?
                 Number.parseInt(process.env.port ?? process.env.API_PORT) :
                 Server.DEFAULT_PORT);
+    }
 
+    async init() {
         global.logger = winston.createLogger({
             transports: [
                 new winston.transports.DailyRotateFile({
@@ -59,7 +61,7 @@ export default class Server {
             optionsSuccessStatus: 200
         };
         expressApp.use(cors(corsOptions));        
-        expressApp.use('/uw', AuthRoutes.getRoutes());
+        expressApp.use('/uw', await Routes.getRoutes());
         
         expressApp.use((req, res, next) => {
             res.type('text/html');

@@ -38,10 +38,7 @@ export default class OpenMeteo {
                     forecast_days: params.days.toFixed(0),
                     windspeed_unit: 'mph',
                     timeformat: 'unixtime',
-                    //Contrary to the docs (https://open-meteo.com/en/docs) timezone does not accept any abbreviations
-                    //from https://en.wikipedia.org/wiki/List_of_tz_database_time_zones.  It will not accept DST abbreviations
-                    //such as 
-                    timezone: 'EST'//tzResponse.data.abbreviation
+                    timezone: timezone
                 },
                 httpsAgent: new https.Agent({
                     rejectUnauthorized: false
