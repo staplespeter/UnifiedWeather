@@ -1,7 +1,6 @@
 import express, { ErrorRequestHandler } from "express";
 import cors from 'cors';
 import http from 'http';
-import fs from 'fs';
 import Routes from "./Api/Routes";
 import winston from "winston";
 import winstonDailyFileTransport from 'winston-daily-rotate-file';
@@ -36,21 +35,19 @@ export default class Server {
     }
 
     async init() {
+        const fileTransport = new winstonDailyFileTransport({
+            dirname: './logs/',
+            filename: '%DATE%.log',
+            maxFiles: '30d'
+        });
+        const exceptionTransport = new winstonDailyFileTransport({
+            dirname: './logs/',
+            filename: 'exceptions.%DATE%.log',
+            maxFiles: '30d'
+        });
         global.logger = winston.createLogger({
-            transports: [
-                new winston.transports.DailyRotateFile({
-                    dirname: './logs/',
-                    filename: '%DATE%.log',
-                    maxFiles: '30d'
-                })
-            ],
-            exceptionHandlers: [
-                new winston.transports.DailyRotateFile({
-                    dirname: './logs/',
-                    filename: 'exceptions.%DATE%.log',
-                    maxFiles: '30d'
-                })
-            ]
+            transports: [fileTransport],
+            exceptionHandlers: [exceptionTransport]
         });
         
         const expressApp = express();

@@ -24,11 +24,11 @@ namespace UW {
     }
     type Result = {
         error?: string;
-        data?: DataSourceResponse[];//Data[];
+        data?: Data[];
     }
 
 
-    type DatasourceName = "WeatherAPI" | "OpenMeteo";
+    type DatasourceName = "WeatherAPI" | "OpenMeteo" | "TimeZoneDB";
     type DatasourceResponseFormat = "JSON" | "XML" | "CSV";
     type DatasourceSystemParams = {
         [key: string]: string | number;
@@ -86,22 +86,26 @@ namespace UW {
         latitude: number;
         longitude: number;
         hourly: OpenMeteoResponseHourly;
-        hourly_units: OpenMeteoResponseHourlyUnits;  //needed??
     }
 
-    type DataSourceResponse = WeatherApiResponse | OpenMeteoResponse;
+    type TimeZoneDbResponse = {
+        abbreviation: string;
+        nextAbbreviation: string;
+        dst: boolean;
+    }
+
+    type DatasourceResponse = WeatherApiResponse | OpenMeteoResponse | TimeZoneDbResponse;
 
 
-    interface IDataSource<T> {
-        configuration: UW.DatasourceConfig;
-        getResponse(config: UW.DatasourceConfig): Promise<T>;
-        get(params: QueryParams): Data[];
+    interface IDataRequestor<T> {
+        configuration: DatasourceConfig;
+        get(): Promise<T>;
+    }
+    interface IDataSource {
+        requestor: IDataRequestor<T>;
+        get(): Promise<Data[]>;
     }
     interface IDataOptimiser {
         optimise(data: Array<Data[]>): Data[];
-    }
-    interface Chainable {
-        next
-        next
     }
 }

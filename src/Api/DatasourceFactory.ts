@@ -1,15 +1,28 @@
-import JsonApiDatasource from "./DataSources/JsonApiDatasource";
+import ConfigurationManager from "./ConfigurationManager";
+import JsonApiRequestor from "./Requestors/JsonApiRequestor";
+import OpenMeteoTranslator from "./Translators/OpenMeteoTranslator";
+import WeatherApiTranslator from "./Translators/WeatherApiTranslator";
 
 export default class DataSourceFactory {
-    create(config: UW.DatasourceConfig): UW.IDataSource<UW.DataSourceResponse> {
-        switch (config.name) {
-            case 'OpenMeteo':
-                return new JsonApiDatasource<UW.OpenMeteoResponse>(config);
-            case 'WeatherAPI':
-                return new JsonApiDatasource<UW.WeatherApiResponse>(config);
-            default:
-                global.logger?.error('Configuration file source entry not supported for name ' + config.name);
-                return null;
-        }
+    create(configManager: ConfigurationManager): UW.IDataSource[] {
+        let sources = new Array<UW.IDataSource>();
+
+        configManager.configurations.forEach(c => {
+            switch (c.name) {
+                case 'OpenMeteo':
+                    sources.push(new OpenMeteoTranslator(
+                        new JsonApiRequestor<UW.TimeZoneDbResponse>(configManager.get('TimeZoneDB')),
+                        new JsonApiRequestor<UW.OpenMeteoResponse>(c)
+                    ));
+                case 'WeatherAPI':
+                    sources.push(new WeatherApiTranslator(new JsonApiRequestor<UW.WeatherApiResponse>(c)));
+                case 'TimeZoneDB':
+                    break;
+                default:
+                    global.logger?.error('Configuration file source entry not supported for name ' + c.name);
+            }
+        });
+
+        return sources;
     }
 }

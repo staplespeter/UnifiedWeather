@@ -1,22 +1,19 @@
 import axios from "axios";
 
-export default class JsonApiDatasource<T> implements UW.IDataSource<T> {
+export default class JsonApiRequestor<T> implements UW.IDataRequestor<T> {
     configuration: UW.DatasourceConfig;
 
     constructor(config: UW.DatasourceConfig) {
         this.configuration = config;
     }
 
-    async getResponse(config: UW.DatasourceConfig): Promise<T> {
-        this.configuration = config;
-
+    async get(): Promise<T> {
         let response = null;
         try {
             const options = {
                 method: 'GET',
-                url: config.url.toString(),
-                params: config.params.system
-                //TODO: set httpsAgent?
+                url: this.configuration.url.toString(),
+                params: this.configuration.params.system
             };
             response = (await axios.request(options)).data;
         }
@@ -28,13 +25,9 @@ export default class JsonApiDatasource<T> implements UW.IDataSource<T> {
                         '; API Error: ' + err.response?.data?.reason :
                         '');
             }
-            global.logger?.error(err);
+            global.logger?.error(logMessage);
         }
 
         return response;
-    }
-
-    get(params: UW.QueryParams): UW.Data[] {
-        return;
     }
 }

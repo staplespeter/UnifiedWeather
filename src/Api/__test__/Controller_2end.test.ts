@@ -1,4 +1,17 @@
+import winston from "winston";
+import winstonDailyFileTransport from 'winston-daily-rotate-file';
 import Controller from "../Controller";
+
+
+global.logger = winston.createLogger({
+    transports: [
+        new winstonDailyFileTransport({
+            dirname: './logs/jest/',
+            filename: 'test.%DATE%.log',
+            maxFiles: '30d'
+        })
+    ]
+});
 
 describe('Controller to end tests', () => {
     it('can request data from APIs using a config', async () => {

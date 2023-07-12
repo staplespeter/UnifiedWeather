@@ -17,7 +17,7 @@ export default class Routes {
         const router = express.Router();
         router.use(express.json());
 
-        //todo
+        //todo: RESTful
         // router.get('/:lat/:long', async (req, res) => {
 
         // });
