@@ -4,6 +4,7 @@ namespace UW {
         longitude: string;
         days?: string;
     }
+    /** The return data format of the UW API. */
     type Data = {
         //floating point to 6dp
         latitude: number;

@@ -1,13 +1,21 @@
 import express from 'express';
 import Controller from './Controller';
 
-
+/** UW specific express request */
 type UWRequest = express.Request<{}, UW.Result, UW.QueryParams, UW.QueryParams>;
+/** UW specific express response */
 type UWResponse = express.Response<UW.Result>
 
+/**
+ * Assigns express routing methods for handling HTTP request and response.
+ */
 export default class Routes {
     private static controller: Controller = null;
 
+    /**
+     * Assigns express routing methods for handling HTTP request and response. 
+     * @returns {express.Router} The express routing object containing the methods.
+     */
     static async getRoutes(): Promise<express.Router> {
         if (!Routes.controller) {
             Routes.controller = new Controller();
@@ -17,10 +25,11 @@ export default class Routes {
         const router = express.Router();
         router.use(express.json());
 
-        //todo: RESTful
+        //todo: RESTful handler.
         // router.get('/:lat/:long', async (req, res) => {
 
         // });
+        //Standard GET method handler 
         router.get('/', async (req: UWRequest, res: UWResponse) => {
             let result: UW.Result = null;
             res.type('appplication.json');
@@ -39,6 +48,7 @@ export default class Routes {
             }
             res.status(200).send(result);
         });
+        //Standard POST handler
         router.post('/', async (req: UWRequest, res: UWResponse) => {
             let result: UW.Result = null;
             res.type('appplication.json');

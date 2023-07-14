@@ -3,7 +3,15 @@ import JsonApiRequestor from "./Requestors/JsonApiRequestor";
 import OpenMeteoTranslator from "./Translators/OpenMeteoTranslator";
 import WeatherApiTranslator from "./Translators/WeatherApiTranslator";
 
+/**
+ * Creates data sources (translator + requestor) based on the supplied configurations.
+ */
 export default class DataSourceFactory {
+    /**
+     * Creates data sources (translator + requestor) based on the configurations in the ConfigurationManager.
+     * @param {ConfigurationManager} configManager - The ConfigurationManager holding the configs.
+     * @returns {UW.IDataSource[]} An array of datasources.
+     */
     create(configManager: ConfigurationManager): UW.IDataSource[] {
         let sources = new Array<UW.IDataSource>();
 

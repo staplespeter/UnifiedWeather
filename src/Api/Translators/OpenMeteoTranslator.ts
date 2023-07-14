@@ -1,13 +1,26 @@
 import AbstractTranslator from "./AbstractTranslator";
 
+/**
+ * Translates the resopnse from OpenMeteo weather service API to the UW format.
+ */
 export default class OpenMeteoTranslator extends AbstractTranslator<UW.OpenMeteoResponse> {
     timezoneRequestor: UW.IDataRequestor<UW.TimeZoneDbResponse>;
 
+    /**
+     * Stores the requestors.
+     * @param {UW.IDataRequestor<UW.TimeZoneDbResponse>} timezoneRequestor - The OpenMeteo service requires the time zone abbreviation.
+     * This must be obtained from a separate API.  Using timezonedb.com for this.  This is the requestor object that will return the timezone response.
+     * @param {UW.IDataRequestor<UW.OpenMeteoResponse>} requestor - The requestor for querying the OpenMeteo API
+     */
     constructor(timezoneRequestor: UW.IDataRequestor<UW.TimeZoneDbResponse>, requestor: UW.IDataRequestor<UW.OpenMeteoResponse>) {
         super(requestor);
         this.timezoneRequestor = timezoneRequestor;
     }
 
+    /**
+     * Translates the response from the OpenMeteo API into the UW format.
+     * @returns The OpenMeteo response in UW format.
+     */
     async get(): Promise<Array<UW.Data>> {
         let data = new Array<UW.Data>();
 

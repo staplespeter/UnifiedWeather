@@ -3,12 +3,22 @@ import DataSourceFactory from "./DatasourceFactory";
 import AveragingOptimiser from "./Optimisers/AveragingOptimiser";
 import UnifiedWeather from "./UnifiedWeather";
 
+/**
+ * Builds the UW and gets data from it.
+ */
 export default class Controller {
+    /** The configuration manager used to handle config files. */
     configurationManager: ConfigurationManager;
+    /** The factory used to build data sources (requestors + translators) */
     datasourceFactory: DataSourceFactory;
+    /** The data optimiser that combines the data from multiple sources into one. */
     optimiser: UW.IDataOptimiser;
+    /** UW object that orchestrates the retrieval, translation and optimisation of weather data from multiple API sources. */
     unifiedWeather: UnifiedWeather;
 
+    /**
+     * Creates configuration manager, datasource factory, optimiser and the UW object.
+     */
     constructor() {
         this.configurationManager = new ConfigurationManager();
         this.datasourceFactory = new DataSourceFactory();
@@ -16,10 +26,18 @@ export default class Controller {
         this.unifiedWeather = new UnifiedWeather(this.configurationManager, this.datasourceFactory, this.optimiser);
     }
 
+    /**
+     * Initialises the UW object.
+     */
     async init() {
         await this.unifiedWeather.init();
     }
 
+    /**
+     * Checks UW API request query params and gets the data from the UW object.
+     * @param {UW.QueryParams} params - The UW API request params.
+     * @returns {UW.Result} The result of the query - the data or an error message.
+     */
     async getUWData(params: UW.QueryParams): Promise<UW.Result> {
         const result: UW.Result = {};
 

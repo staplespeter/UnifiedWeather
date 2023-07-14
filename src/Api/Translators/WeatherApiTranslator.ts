@@ -1,6 +1,13 @@
 import AbstractTranslator from "./AbstractTranslator";
 
+/**
+ * Translates the resopnse from WeatherAPI weather service API to the UW format.
+ */
 export default class WeatherApiTranslator extends AbstractTranslator<UW.WeatherApiResponse> {
+    /**
+     * Translates the response from the WeatherAPI API into the UW format.
+     * @returns The WeatherAPI response in UW format.
+     */
     async get(): Promise<Array<UW.Data>> {
         let data = new Array<UW.Data>();
 
