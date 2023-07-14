@@ -49,5 +49,5 @@
         }
     ],
     "optimiser": "average",
-    "fields": ["latitude","longitude","temperature","temperatureUnit","windSpeed","windspeedUnit","windDirection","precipitationChance"]
+    "fields": ["latitude","longitude","utcTime","temperature","temperatureUnit","windSpeed","windspeedUnit","windDirection","precipitationChance"]
 }
