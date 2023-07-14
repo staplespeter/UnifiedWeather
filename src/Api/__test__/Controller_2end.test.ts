@@ -2,7 +2,7 @@ import Controller from "../Controller";
 
 
 describe('Controller to end tests', () => {
-    it('can request data from APIs using a config', async () => {
+    it('can aggregate weather data from APIs', async () => {
         const controller = new Controller();
         await controller.init();
         const result = await controller.getUWData({

@@ -1,9 +1,9 @@
 import ConfigurationManager from './ConfigurationManager';
 import DataSourceFactory from './DatasourceFactory';
 import OptimiserFactory from './OptimiserFactory';
-import QueryFieldFilter from './QueryFieldFilter';
-import SystemFieldFilter from './SystemFieldFilter';
-import UnitConverter from './UnitConverter';
+import QueryFieldFilter from './Filters/QueryFieldFilter';
+import SystemFieldFilter from './Filters/SystemFieldFilter';
+import UnitConverter from './Filters/UnitConverter';
 
 /**
  * Orchestrates the retrieval, translation and optimisation of weather data from multiple API sources.

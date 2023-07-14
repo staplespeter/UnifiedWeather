@@ -1,7 +1,7 @@
 /**
  * Filters fields based on their presence in the config file 'fields' property.
  */
-import ConfigurationManager from "./ConfigurationManager";
+import ConfigurationManager from "../ConfigurationManager";
 
 export default class SystemFieldFilter implements UW.IDataTransformer {
     configurationManager: ConfigurationManager;
