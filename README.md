@@ -6,6 +6,8 @@ Demo weather aggregator
 
 >clone main branch
 
+>npm install
+
 >npm run deploy
 go to
 >http://localhost:25025/uw/
