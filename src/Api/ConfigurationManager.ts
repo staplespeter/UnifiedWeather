@@ -6,24 +6,19 @@ import template from 'just-template';
  */
 export default class ConfigurationManager {
     /** The configurations loaded */
-    configurations: UW.DatasourceConfig[] = null;
-    /** The names of the datasources that requestors use */
-    sourceNames: string[] = null;
+    configuration: UW.UWConfig = null;
 
     /**
      * Loads the configurations from the specified file.
      * @param {string} filePath - The path of the file.
      */
     async load(filePath: string) {
-        this.sourceNames = new Array<string>();
-
         let fileHandle: fs.FileHandle = null;
         try {
             fileHandle = await fs.open(filePath);
             if (fileHandle) {
                 const data = await fs.readFile(fileHandle, 'ascii');
-                this.configurations = JSON.parse(data).sources;
-                this.sourceNames = this.configurations.map(c => { return c.name });
+                this.configuration = JSON.parse(data);
             }
         }
         finally {
@@ -39,7 +34,7 @@ export default class ConfigurationManager {
      * @returns {UW.DatasourceConfig} The configurationobject.
      */
     get(name: string): UW.DatasourceConfig {
-        const config = this.configurations.find(c => {
+        const config = this.configuration.sources.find(c => {
             return c.name === name;
         });
         if (!config) {
@@ -53,15 +48,15 @@ export default class ConfigurationManager {
      * Injects the query parameters from the request to the UW API into the config,
      * adding those injected parameters to the requestor 'system' params. 
      * @param {UW.QueryParams} params - The query parameters to inject. 
-     * @returns {UW.DatasourceConfig[]} The configuration objects with the injected params.
+     * @returns {UW.DatasourceConfig[]} The datasource configuration objects with the injected params.
      */
     injectUWApiParams(params: UW.QueryParams): UW.DatasourceConfig[] {
-        this.configurations.forEach(c => {
+        this.configuration.sources.forEach(c => {
             Object.entries(c.params.uwApi).forEach(([key, value]) => {
                 c.params.system[key] = template(value, params);
             });
         })
         
-        return this.configurations;
+        return this.configuration.sources;
     }
 }

@@ -1,5 +1,6 @@
 import ConfigurationManager from './ConfigurationManager';
 import DataSourceFactory from './DatasourceFactory';
+import OptimiserFactory from './OptimiserFactory';
 
 /**
  * Orchestrates the retrieval, translation and optimisation of weather data from multiple API sources.
@@ -8,22 +9,24 @@ export default class UnifiedWeather {
     /** ConfigurationManager storing the configs for each component */
     configurationManager: ConfigurationManager;
      /** The factory used to build data sources (requestors + translators) */
-    factory: DataSourceFactory;
-    /** The data optimiser that combines the data from multiple sources into one. */
-    optimiser: UW.IDataOptimiser;
+    datasourceFactory: DataSourceFactory;
+    /** The factory used to get the optimiser */
+    optimiserFactory: OptimiserFactory;
     /** The sources that data is retreived from */
     sources: UW.IDataSource[];
+    /** The data optimiser that combines the data from multiple sources into one. */
+    optimiser: UW.IDataOptimiser;
 
     /**
      * Stores the ConfigurationManage, DataSourceFactory and IDataOptimiser
      * @param {ConfigurationManager} configManager - The confifg manager.
-     * @param {DataSourceFactory} factory - The datasource factory.
-     * @param {UW.IDataOptimiser} optimiser - The optimiser.
+     * @param {DataSourceFactory} datasourceFactory - The datasource factory.
+     * @param {OptimiserFactory} optimiserFactory - The optimiser.
      */
-    constructor(configManager: ConfigurationManager, factory: DataSourceFactory, optimiser: UW.IDataOptimiser) {
+    constructor(configManager: ConfigurationManager, datasourceFactory: DataSourceFactory, optimiserFactory: OptimiserFactory) {
         this.configurationManager = configManager;
-        this.factory = factory;
-        this.optimiser = optimiser;
+        this.datasourceFactory = datasourceFactory;
+        this.optimiserFactory = optimiserFactory;
         this.sources = null;
     }
 
@@ -32,10 +35,11 @@ export default class UnifiedWeather {
      */
     async init() {
         await this.configurationManager.load('./config/sources.config.json');
-        this.sources = this.factory.create(this.configurationManager);
+        this.sources = this.datasourceFactory.create(this.configurationManager);
         if (this.sources.length === 0) {
             throw new Error('No data sources found');
         }
+        this.optimiser = this.optimiserFactory.create(this.configurationManager);
     }
 
     /**

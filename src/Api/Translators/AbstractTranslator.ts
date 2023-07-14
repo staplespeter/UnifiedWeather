@@ -14,7 +14,7 @@ export default abstract class AbstractTranslator<T> implements UW.IDataSource {
     }
  
     /**
-     * Implementations of this should translate the response from the requestor to the UW data format.
+     * Implementations of this should call requestor.get() and translate the response from the requestor to the UW data format.
      * Translators that receive data with undefined source fields must set the output fields to null.
      * This is required so that optimisers can ignore that value.
      * @returns The tranlated data.

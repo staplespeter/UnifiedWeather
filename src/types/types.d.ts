@@ -47,6 +47,10 @@ namespace UW {
         format: DatasourceResponseFormat;
         params: DatasourceParams;
     }
+    type UWConfig = {
+        sources: DatasourceConfig[];
+        optimiser: 'average'
+    }
 
 
     type WeatherApiResponseLocation = {

@@ -1,29 +1,19 @@
 import ConfigurationManager from "./ConfigurationManager";
 import DataSourceFactory from "./DatasourceFactory";
-import AveragingOptimiser from "./Optimisers/AveragingOptimiser";
+import OptimiserFactory from "./OptimiserFactory";
 import UnifiedWeather from "./UnifiedWeather";
 
 /**
  * Builds the UW and gets data from it.
  */
 export default class Controller {
-    /** The configuration manager used to handle config files. */
-    configurationManager: ConfigurationManager;
-    /** The factory used to build data sources (requestors + translators) */
-    datasourceFactory: DataSourceFactory;
-    /** The data optimiser that combines the data from multiple sources into one. */
-    optimiser: UW.IDataOptimiser;
-    /** UW object that orchestrates the retrieval, translation and optimisation of weather data from multiple API sources. */
     unifiedWeather: UnifiedWeather;
 
     /**
      * Creates configuration manager, datasource factory, optimiser and the UW object.
      */
     constructor() {
-        this.configurationManager = new ConfigurationManager();
-        this.datasourceFactory = new DataSourceFactory();
-        this.optimiser = new AveragingOptimiser();
-        this.unifiedWeather = new UnifiedWeather(this.configurationManager, this.datasourceFactory, this.optimiser);
+        this.unifiedWeather = new UnifiedWeather(new ConfigurationManager(), new DataSourceFactory(), new OptimiserFactory());
     }
 
     /**

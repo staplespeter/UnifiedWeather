@@ -15,7 +15,7 @@ export default class DataSourceFactory {
     create(configManager: ConfigurationManager): UW.IDataSource[] {
         let sources = new Array<UW.IDataSource>();
 
-        configManager.configurations.forEach(c => {
+        configManager.configuration.sources.forEach(c => {
             switch (c.name) {
                 case 'OpenMeteo':
                     sources.push(new OpenMeteoTranslator(
