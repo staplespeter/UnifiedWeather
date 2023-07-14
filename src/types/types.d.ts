@@ -51,7 +51,8 @@ namespace UW {
     }
     type UWConfig = {
         sources: DatasourceConfig[];
-        optimiser: 'average'
+        optimiser: 'average',
+        fields: string[];
     }
 
 

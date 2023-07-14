@@ -2,6 +2,7 @@ import ConfigurationManager from './ConfigurationManager';
 import DataSourceFactory from './DatasourceFactory';
 import OptimiserFactory from './OptimiserFactory';
 import QueryFieldFilter from './QueryFieldFilter';
+import SystemFieldFilter from './SystemFieldFilter';
 
 /**
  * Orchestrates the retrieval, translation and optimisation of weather data from multiple API sources.
@@ -13,6 +14,8 @@ export default class UnifiedWeather {
     datasourceFactory: DataSourceFactory;
     /** The factory used to get the optimiser */
     optimiserFactory: OptimiserFactory;
+    /** Field filter to limit the response fields based on the config 'fields' entry */
+    systemFieldFilter: UW.IDataFieldFilter;
     /** The sources that data is retreived from */
     sources: UW.IDataSource[];
     /** The data optimiser that combines the data from multiple sources into one. */
@@ -28,6 +31,7 @@ export default class UnifiedWeather {
         this.configurationManager = configManager;
         this.datasourceFactory = datasourceFactory;
         this.optimiserFactory = optimiserFactory;
+        this.systemFieldFilter = new SystemFieldFilter(this.configurationManager)
         this.sources = null;
     }
 
@@ -57,6 +61,6 @@ export default class UnifiedWeather {
         };
 
         const qFilter = new QueryFieldFilter(params);
-        return qFilter.get(this.optimiser.get(sourceData));
+        return qFilter.get(this.systemFieldFilter.get(this.optimiser.get(sourceData)));
     }
 }
