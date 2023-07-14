@@ -37,7 +37,10 @@ export default class Controller {
             }
             else if (!params.longitude || Number.parseFloat(params.longitude) < -180 || Number.parseFloat(params.longitude) > 180) {
                 result.error = 'Invalid longitude';
-            }            
+            }
+            else if (params.days && (Number.parseFloat(params.days) < 1 || Number.parseFloat(params.days) > 14)) {
+                result.error = 'Invalid days';
+            }
             else {
                 params.days = params.days ?? '7';
                 result.weatherData = await this.unifiedWeather.get(params);
