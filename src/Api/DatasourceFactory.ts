@@ -14,8 +14,10 @@ export default class DataSourceFactory {
                         new JsonApiRequestor<UW.TimeZoneDbResponse>(configManager.get('TimeZoneDB')),
                         new JsonApiRequestor<UW.OpenMeteoResponse>(c)
                     ));
+                    break;
                 case 'WeatherAPI':
                     sources.push(new WeatherApiTranslator(new JsonApiRequestor<UW.WeatherApiResponse>(c)));
+                    break;
                 case 'TimeZoneDB':
                     break;
                 default:

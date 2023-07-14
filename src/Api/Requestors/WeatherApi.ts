@@ -1,6 +1,7 @@
 import axios from "axios";
 import * as https from 'https';
 
+
 export default class WeatherApi {
     static BASE_URL = 'https://api.weatherapi.com/';
 
@@ -13,8 +14,8 @@ export default class WeatherApi {
                 url: WeatherApi.BASE_URL + 'v1/forecast.json',
                 params: {
                   key: 'd652ae67e93f497f844231406231007',
-                  q: params.latitude.toFixed(6) + ',' + params.longitude.toFixed(6),
-                  days: params.days.toFixed(0)
+                  q: params.latitude + ',' + params.longitude,
+                  days: params.days
                 },
                 httpsAgent: new https.Agent({
                     rejectUnauthorized: false

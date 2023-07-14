@@ -6,6 +6,7 @@ import winston from "winston";
 import winstonDailyFileTransport from 'winston-daily-rotate-file';
 
 export default class Server {
+    private initialised: boolean = false;
     private httpServer: http.Server;
 
     static readonly DEFAULT_HOSTNAME = 'localhost';
@@ -79,9 +80,15 @@ export default class Server {
             console.log('http server error: ' + err);
             await this.stop();
         });
+
+        this.initialised = true;
     }
 
-    start(): void {
+    async start(): Promise<void> {
+        if (!this.initialised){
+            await this.init();
+        }
+
         this.httpServer.listen({
             host: this._hostname,
             port: this._port

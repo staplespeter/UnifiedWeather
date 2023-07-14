@@ -8,5 +8,5 @@ module.exports = {
     modulePathIgnorePatterns: [
         '<rootDir>/build/'
     ],
-    testTimeout: 600000,
+    testTimeout: 600000
 };

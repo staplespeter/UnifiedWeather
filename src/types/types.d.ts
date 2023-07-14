@@ -1,8 +1,8 @@
 namespace UW {
     type QueryParams = {
-        latitude: number;
-        longitude: number;
-        days?: number;
+        latitude: string;
+        longitude: string;
+        days?: string;
     }
     type Data = {
         //floating point to 6dp
@@ -24,14 +24,14 @@ namespace UW {
     }
     type Result = {
         error?: string;
-        data?: Data[];
+        weatherData?: Data[];
     }
 
 
     type DatasourceName = "WeatherAPI" | "OpenMeteo" | "TimeZoneDB";
     type DatasourceResponseFormat = "JSON" | "XML" | "CSV";
     type DatasourceSystemParams = {
-        [key: string]: string | number;
+        [key: string]: string;
     }
     type DatasourceUWApiParams = {
         [key: string]: keyof QueryParams;
@@ -75,12 +75,6 @@ namespace UW {
         windspeed_10m: number[];
         winddirection_10m: number[];
         precipitation_probability: number[];
-    }
-    type OpenMeteoResponseHourlyUnits = {
-        temperature_2m: string;
-        windspeed_10m: string;
-        winddirection_10m: string;
-        precipitation_probability: string;
     }
     type OpenMeteoResponse = {
         latitude: number;

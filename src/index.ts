@@ -1,6 +1,3 @@
-//import obj from './dotenvLoader';
-//const o = obj;
-
 import Server from "./Server";
 let server = new Server();
 await server.init();

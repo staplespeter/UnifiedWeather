@@ -24,8 +24,8 @@ export default class OpenMeteoTranslator extends AbstractTranslator<UW.OpenMeteo
 
             for (let x = 0; x < dataResponse.hourly.time.length; x++) {
                 data.push({
-                    latitude: dataResponse.latitude,
-                    longitude: dataResponse.longitude,
+                    latitude: Number.parseFloat(this.requestor.configuration.params.system.latitude),
+                    longitude: Number.parseFloat(this.requestor.configuration.params.system.longitude),
                     utcTime: new Date(dataResponse.hourly.time[x] * 1000),
                     temperature: dataResponse.hourly.temperature_2m[x],
                     temperatureUnit: 'C',

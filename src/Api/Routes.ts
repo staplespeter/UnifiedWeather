@@ -37,7 +37,7 @@ export default class Routes {
                 res.status(500).send(result);
                 return;
             }
-            res.status(201).send(result);
+            res.status(200).send(result);
         });
         router.post('/', async (req: UWRequest, res: UWResponse) => {
             let result: UW.Result = null;
@@ -55,7 +55,7 @@ export default class Routes {
                 res.status(500).send(result);
                 return;
             }
-            res.status(201).send(result);
+            res.status(200).send(result);
         });
 
         return router;

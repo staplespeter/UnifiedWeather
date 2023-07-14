@@ -20,9 +20,7 @@ export default class UnifiedWeather {
     }
 
     async get(params: UW.QueryParams): Promise<UW.Data[]> {
-        this.configurationManager.sourceNames.forEach(n => {
-            const config = this.configurationManager.injectUWApiParams(n, params);
-        });
+        this.configurationManager.injectUWApiParams(params);
         
         const sourceData = new Array<UW.Data[]>();
         for (let s of this.sources) {

@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
-const interpolation = require('interpolate-json').interpolation;
+import template from 'just-template';
+
 
 export default class ConfigurationManager {
     configurations: UW.DatasourceConfig[] = null;
@@ -35,13 +36,13 @@ export default class ConfigurationManager {
         return config;
     }
 
-    injectUWApiParams(name: string, params: UW.QueryParams): UW.DatasourceConfig {
-        const config = this.get(name);
-
-        Object.entries(config.params.uwApi).forEach(([key, value]) => {
-            config.params.system[key] = interpolation.expand(value, params);
-        });
-
-        return config;
+    injectUWApiParams(params: UW.QueryParams): UW.DatasourceConfig[] {
+        this.configurations.forEach(c => {
+            Object.entries(c.params.uwApi).forEach(([key, value]) => {
+                c.params.system[key] = template(value, params);
+            });
+        })
+        
+        return this.configurations;
     }
 }

@@ -10,9 +10,8 @@ export default class WeatherApiTranslator extends AbstractTranslator<UW.WeatherA
             dataResponse.forecast.forecastday.forEach((day: UW.WeatherApiResponseForecastDay) => {
                 day.hour.forEach((hour: UW.WeatherApiResponseForecastHour) => {
                     data.push({
-                        latitude: dataResponse.location.lat,
-                        longitude: dataResponse.location.lon,
-                        //time is BST = GMT + 1, and the days start at time == 00:00, so time_epoch == 23:00 
+                        latitude: Number.parseFloat(this.requestor.configuration.params.system.q.split(',')[0]),
+                        longitude: Number.parseFloat(this.requestor.configuration.params.system.q.split(',')[1]),
                         utcTime: new Date(hour.time_epoch * 1000),
                         temperature: hour.temp_c,
                         temperatureUnit: 'C',
