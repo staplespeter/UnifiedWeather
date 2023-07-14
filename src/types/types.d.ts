@@ -1,10 +1,17 @@
 namespace UW {
+    type TemperatureUnit = "C" | "F";
+    type WindspeedUnit = "kph" | "mph";
     type QueryParams = {
-        latitude: number;
-        longitude: number;
-        days?: number;
+        latitude: string;
+        longitude: string;
+        days?: string;
+        fields?: string;
+        temperatureUnit?: TemperatureUnit;
+        windspeedUnit?: WindspeedUnit;
     }
+    /** The return data format of the UW API. */
     type Data = {
+        [key: string]: number | Date | string;
         //floating point to 6dp
         latitude: number;
         //floating point to 6dp
@@ -13,10 +20,10 @@ namespace UW {
         utcTime: Date;
         //floating point to 1dp
         temperature: number;
-        temperatureUnit: "C" | "F";
+        temperatureUnit: TemperatureUnit;
         //floating point to 2dp
         windSpeed: number;
-        windspeedUnit: "km/h" | "mph" | "kn";
+        windspeedUnit: WindspeedUnit;
         //degrees, floating point to 2dp
         windDirection: number;
         //percentage
@@ -24,10 +31,35 @@ namespace UW {
     }
     type Result = {
         error?: string;
-        data?: Data[];
+        weatherData?: Data[];
     }
 
-    
+
+    type DatasourceName = "WeatherAPI" | "OpenMeteo" | "TimeZoneDB";
+    type DatasourceResponseFormat = "JSON" | "XML" | "CSV";
+    type DatasourceSystemParams = {
+        [key: string]: string;
+    }
+    type DatasourceUWApiParams = {
+        [key: string]: keyof QueryParams;
+    }
+    type DatasourceParams = {
+        system: DatasourceSystemParams;
+        uwApi: DatasourceUWApiParams;
+    }
+    type DatasourceConfig = {
+        name: DatasourceName;
+        url: URL;
+        format: DatasourceResponseFormat;
+        params: DatasourceParams;
+    }
+    type UWConfig = {
+        sources: DatasourceConfig[];
+        optimiser: 'average',
+        fields: string[];
+    }
+
+
     type WeatherApiResponseLocation = {
         lat: number;
         lon: number;
@@ -56,24 +88,33 @@ namespace UW {
         winddirection_10m: number[];
         precipitation_probability: number[];
     }
-    type OpenMeteoResponseHourlyUnits = {
-        temperature_2m: string;
-        windspeed_10m: string;
-        winddirection_10m: string;
-        precipitation_probability: string;
-    }
     type OpenMeteoResponse = {
         latitude: number;
         longitude: number;
         hourly: OpenMeteoResponseHourly;
-        hourly_units: OpenMeteoResponseHourlyUnits;  //needed??
     }
 
+    type TimeZoneDbResponse = {
+        abbreviation: string;
+        nextAbbreviation: string;
+        dst: boolean;
+    }
 
+    type DatasourceResponse = WeatherApiResponse | OpenMeteoResponse | TimeZoneDbResponse;
+
+
+    interface IDataRequestor<T> {
+        configuration: DatasourceConfig;
+        get(): Promise<T>;
+    }
     interface IDataSource {
-        get(params: QueryParams): Promise<Data[]>;
+        requestor: IDataRequestor<T>;
+        get(): Promise<Data[]>;
     }
     interface IDataOptimiser {
-        optimise(data: Array<Data[]>): Data[];
+        get(data: Array<Data[]>): Data[];
+    }
+    interface IDataTransformer {
+        get(data: Data[]): Data[];
     }
 }

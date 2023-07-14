@@ -1,26 +1,41 @@
 import express, { ErrorRequestHandler } from "express";
 import cors from 'cors';
 import http from 'http';
-import fs from 'fs';
-import AuthRoutes from "./Api/Routes";
+import Routes from "./Api/Routes";
 import winston from "winston";
 import winstonDailyFileTransport from 'winston-daily-rotate-file';
 
+/**
+ * HTTP server class for handling weather forecast requests.
+ */
 export default class Server {
+    private initialised: boolean = false;
     private httpServer: http.Server;
 
     static readonly DEFAULT_HOSTNAME = 'localhost';
     static readonly DEFAULT_PORT = 25025;
 
+    /**
+     * Hostname of HTTP server.
+     */
     private _hostname: string;
     get hostname() {
         return this._hostname;
     }
+    /**
+     * Port of HTTP server.
+     */
     private _port: number;
     get port() {
         return this._port;
     }
 
+    /**
+     * Determines host and port.
+     * 
+     * @param {string} [hostname] - HTTP server hostname
+     * @param {number} [port] - HTTP server port
+     */
     constructor();
     constructor(port: number);
     constructor(hostname: string, port: number);
@@ -33,22 +48,25 @@ export default class Server {
             port ?? (!Number.isNaN(Number.parseInt(process.env.port ?? process.env.API_PORT)) ?
                 Number.parseInt(process.env.port ?? process.env.API_PORT) :
                 Server.DEFAULT_PORT);
+    }
 
+    /**
+     * Initialises confguration of HTTP server - logging, CORS, routes, default error handling
+     */
+    async init() {
+        const fileTransport = new winstonDailyFileTransport({
+            dirname: './logs/',
+            filename: '%DATE%.log',
+            maxFiles: '30d'
+        });
+        const exceptionTransport = new winstonDailyFileTransport({
+            dirname: './logs/',
+            filename: 'exceptions.%DATE%.log',
+            maxFiles: '30d'
+        });
         global.logger = winston.createLogger({
-            transports: [
-                new winston.transports.DailyRotateFile({
-                    dirname: './logs/',
-                    filename: '%DATE%.log',
-                    maxFiles: '30d'
-                })
-            ],
-            exceptionHandlers: [
-                new winston.transports.DailyRotateFile({
-                    dirname: './logs/',
-                    filename: 'exceptions.%DATE%.log',
-                    maxFiles: '30d'
-                })
-            ]
+            transports: [fileTransport],
+            exceptionHandlers: [exceptionTransport]
         });
         
         const expressApp = express();
@@ -59,7 +77,7 @@ export default class Server {
             optionsSuccessStatus: 200
         };
         expressApp.use(cors(corsOptions));        
-        expressApp.use('/uw', AuthRoutes.getRoutes());
+        expressApp.use('/uw', await Routes.getRoutes());
         
         expressApp.use((req, res, next) => {
             res.type('text/html');
@@ -80,9 +98,18 @@ export default class Server {
             console.log('http server error: ' + err);
             await this.stop();
         });
+
+        this.initialised = true;
     }
 
-    start(): void {
+    /**
+     * Initialises the server (if not done) and starts it.
+     */
+    async start(): Promise<void> {
+        if (!this.initialised){
+            await this.init();
+        }
+
         this.httpServer.listen({
             host: this._hostname,
             port: this._port
@@ -92,6 +119,9 @@ export default class Server {
         });
     }
 
+    /**
+     * Stops the server (Ctrl+c)
+     */
     async stop() {
         console.log('\nstopping http server');
 

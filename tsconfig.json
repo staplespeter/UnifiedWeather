@@ -1,4 +1,4 @@
-{ 
+{
   "compilerOptions": {
     "jsx": "react",
     "target": "ESNext",
@@ -21,7 +21,8 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Recommended",
   "include": [
-    "src/**/*",
-    "src/types/*.d.ts"
+      "src/**/*",
+      "src/types/*.d.ts",
+      "__mocks__"
   ]
 }

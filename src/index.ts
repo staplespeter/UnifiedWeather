@@ -1,8 +1,11 @@
-//import obj from './dotenvLoader';
-//const o = obj;
-
+/**
+ * Entry point for starting server.
+ */
 import Server from "./Server";
+
+
 let server = new Server();
+await server.init();
 server.start();
 process.on('SIGINT', async () => {
     await server.stop();

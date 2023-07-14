@@ -1,19 +1,36 @@
 import express from 'express';
 import Controller from './Controller';
 
+/** UW specific express request */
+type UWRequest = express.Request<{}, UW.Result, UW.QueryParams, UW.QueryParams>;
+/** UW specific express response */
+type UWResponse = express.Response<UW.Result>
 
-type UWDataRequest = express.Request<{}, any,any, UW.QueryParams>;
+/**
+ * Assigns express routing methods for handling HTTP request and response.
+ */
+export default class Routes {
+    private static controller: Controller = null;
 
-export default class AuthRoutes {
-    static getRoutes(): express.Router {
+    /**
+     * Assigns express routing methods for handling HTTP request and response. 
+     * @returns {express.Router} The express routing object containing the methods.
+     */
+    static async getRoutes(): Promise<express.Router> {
+        if (!Routes.controller) {
+            Routes.controller = new Controller();
+            await Routes.controller.init();
+        }
+
         const router = express.Router();
         router.use(express.json());
 
-        //todo
+        //todo: RESTful handler.
         // router.get('/:lat/:long', async (req, res) => {
 
         // });
-        router.get('/', async (req: UWDataRequest, res: express.Response, next: express.NextFunction) => {
+        //Standard GET method handler 
+        router.get('/', async (req: UWRequest, res: UWResponse) => {
             let result: UW.Result = null;
             res.type('appplication.json');
 
@@ -24,14 +41,15 @@ export default class AuthRoutes {
                 res.status(400).send(result);
                 return;
             }
-            result = await Controller.getUWData({ latitude: req.query.latitude, longitude: req.query.longitude });
+            result = await Routes.controller.getUWData(req.query);
             if (result.error) {
                 res.status(500).send(result);
                 return;
             }
-            res.status(201).send(result);
+            res.status(200).send(result);
         });
-        router.post('/', async (req, res) => {
+        //Standard POST handler
+        router.post('/', async (req: UWRequest, res: UWResponse) => {
             let result: UW.Result = null;
             res.type('appplication.json');
 
@@ -42,12 +60,12 @@ export default class AuthRoutes {
                 res.status(400).send(result);
                 return;
             }
-            result = await Controller.getUWData({ latitude: req.body.latitude, longitude: req.body.longitude });
+            result = await Routes.controller.getUWData(req.body);
             if (result.error) {
                 res.status(500).send(result);
                 return;
             }
-            res.status(201).send(result);
+            res.status(200).send(result);
         });
 
         return router;

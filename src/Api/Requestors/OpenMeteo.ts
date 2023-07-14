@@ -16,14 +16,14 @@ export default class OpenMeteo {
                     key: 'JIUTI9LUXQ11',
                     format: 'json',
                     by: 'position',
-                    lat: params.latitude.toFixed(6),
-                    lng: params.longitude.toFixed(6)
+                    lat: params.latitude,
+                    lng: params.longitude
                 }
             };
             const tzResponse = (await axios.request(tzOptions)).data;
             //OpenMeteo does not recognise DST timezone abbreviations, except BST.  Need to get the non-DST if in DST period.
             //See https://github.com/open-meteo/open-meteo/issues/396.
-            const timezone = tzResponse.dst === 1 ?
+            const timezone = tzResponse.dst == 1 ?
                 (tzResponse.abbreviation === 'BST' ? tzResponse.abbreviation : tzResponse.nextAbbreviation) :
                 tzResponse.abbreviation;
 
@@ -32,16 +32,13 @@ export default class OpenMeteo {
                 //TODO: change to use URL object
                 url: OpenMeteo.BASE_URL + 'v1/forecast',
                 params: {
-                    latitude: params.latitude.toFixed(6),
-                    longitude: params.longitude.toFixed(6),
+                    latitude: params.latitude,
+                    longitude: params.longitude,
                     hourly: 'temperature_2m,windspeed_10m,winddirection_10m,precipitation_probability',
-                    forecast_days: params.days.toFixed(0),
+                    forecast_days: params.days,
                     windspeed_unit: 'mph',
                     timeformat: 'unixtime',
-                    //Contrary to the docs (https://open-meteo.com/en/docs) timezone does not accept any abbreviations
-                    //from https://en.wikipedia.org/wiki/List_of_tz_database_time_zones.  It will not accept DST abbreviations
-                    //such as 
-                    timezone: 'EST'//tzResponse.data.abbreviation
+                    timezone: timezone
                 },
                 httpsAgent: new https.Agent({
                     rejectUnauthorized: false
