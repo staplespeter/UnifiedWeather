@@ -23,11 +23,11 @@ with query params
 
 >1 < days < 14
 
->temperatureUnit=F
+>temperatureUnit = C | F
 
->windspeedUnit=kph
+>windspeedUnit = mph | kph
 
->fields=latitude,longitude,temperature,temperatureUnit,windSpeed,windspeedUnit,windDirection,precipitationChance
+>fields = latitude,longitude,temperature,temperatureUnit,windSpeed,windspeedUnit,windDirection,precipitationChance
 
 Example:
 http://localhost:25025/uw/?latitude=54.607868&longitude=-5.926437&days=5&temperatureUnit=F&windspeedUnit=kph&fields=latitude,longitude,temperature,temperatureUnit,windSpeed
