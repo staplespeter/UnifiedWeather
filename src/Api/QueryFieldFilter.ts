@@ -2,7 +2,7 @@
  * Filters fields based on their presence in the UW API query param 'fields'.
  * This param is a comma-separated list of valid field names.
  */
-export default class QueryFieldFilter implements UW.IDataFieldFilter {
+export default class QueryFieldFilter implements UW.IDataTransformer {
     fields: string[] = null;
 
     /**

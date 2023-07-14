@@ -1,9 +1,13 @@
 namespace UW {
+    type TemperatureUnit = "C" | "F";
+    type WindspeedUnit = "kph" | "mph";
     type QueryParams = {
         latitude: string;
         longitude: string;
         days?: string;
         fields?: string;
+        temperatureUnit?: TemperatureUnit;
+        windspeedUnit?: WindspeedUnit;
     }
     /** The return data format of the UW API. */
     type Data = {
@@ -16,10 +20,10 @@ namespace UW {
         utcTime: Date;
         //floating point to 1dp
         temperature: number;
-        temperatureUnit: "C" | "F";
+        temperatureUnit: TemperatureUnit;
         //floating point to 2dp
         windSpeed: number;
-        windspeedUnit: "km/h" | "mph" | "kn";
+        windspeedUnit: WindspeedUnit;
         //degrees, floating point to 2dp
         windDirection: number;
         //percentage
@@ -110,7 +114,7 @@ namespace UW {
     interface IDataOptimiser {
         get(data: Array<Data[]>): Data[];
     }
-    interface IDataFieldFilter {
+    interface IDataTransformer {
         get(data: Data[]): Data[];
     }
 }

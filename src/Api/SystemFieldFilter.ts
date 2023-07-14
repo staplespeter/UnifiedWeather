@@ -3,7 +3,7 @@
  */
 import ConfigurationManager from "./ConfigurationManager";
 
-export default class SystemFieldFilter implements UW.IDataFieldFilter {
+export default class SystemFieldFilter implements UW.IDataTransformer {
     configurationManager: ConfigurationManager;
 
     /**

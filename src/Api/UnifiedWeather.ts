@@ -3,6 +3,7 @@ import DataSourceFactory from './DatasourceFactory';
 import OptimiserFactory from './OptimiserFactory';
 import QueryFieldFilter from './QueryFieldFilter';
 import SystemFieldFilter from './SystemFieldFilter';
+import UnitConverter from './UnitConverter';
 
 /**
  * Orchestrates the retrieval, translation and optimisation of weather data from multiple API sources.
@@ -15,7 +16,7 @@ export default class UnifiedWeather {
     /** The factory used to get the optimiser */
     optimiserFactory: OptimiserFactory;
     /** Field filter to limit the response fields based on the config 'fields' entry */
-    systemFieldFilter: UW.IDataFieldFilter;
+    systemFieldFilter: UW.IDataTransformer;
     /** The sources that data is retreived from */
     sources: UW.IDataSource[];
     /** The data optimiser that combines the data from multiple sources into one. */
@@ -60,7 +61,8 @@ export default class UnifiedWeather {
             sourceData.push(await s.get());
         };
 
-        const qFilter = new QueryFieldFilter(params);
-        return qFilter.get(this.systemFieldFilter.get(this.optimiser.get(sourceData)));
+        const unitFilter = new UnitConverter(params);
+        const qFilter = new QueryFieldFilter(params);        
+        return qFilter.get(this.systemFieldFilter.get(unitFilter.get(this.optimiser.get(sourceData))));
     }
 }
