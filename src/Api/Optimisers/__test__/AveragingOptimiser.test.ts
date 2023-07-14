@@ -99,7 +99,7 @@ describe('AveragingOptimiser tests', () => {
                 precipitationChance: null
             },
         ];
-        const result = new AveragingOptimiser().optimise(data);
+        const result = new AveragingOptimiser().get(data);
         expect(result[0].latitude).toEqual(54.607868);
         expect(result[0].longitude).toEqual(-5.926437);
         expect(result[0].utcTime.valueOf()).toEqual((new Date(2023, 6, 1, 0, 0, 0)).valueOf());

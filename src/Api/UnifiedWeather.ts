@@ -1,6 +1,7 @@
 import ConfigurationManager from './ConfigurationManager';
 import DataSourceFactory from './DatasourceFactory';
 import OptimiserFactory from './OptimiserFactory';
+import QueryFieldFilter from './QueryFieldFilter';
 
 /**
  * Orchestrates the retrieval, translation and optimisation of weather data from multiple API sources.
@@ -55,7 +56,7 @@ export default class UnifiedWeather {
             sourceData.push(await s.get());
         };
 
-        const result = this.optimiser.optimise(sourceData);
-        return result;
+        const qFilter = new QueryFieldFilter(params);
+        return qFilter.get(this.optimiser.get(sourceData));
     }
 }

@@ -9,7 +9,7 @@ export default class AveragingOptimiser implements UW.IDataOptimiser {
      * null valued fields are ignored.
      * @returns {UW.Data[]} A 1-d array containing averaged data
      */
-    optimise(data: Array<UW.Data[]>): UW.Data[] {
+    get(data: Array<UW.Data[]>): UW.Data[] {
         //assume data is correctly aligned timewise.
         //assume null fields mean ignore that value.
 

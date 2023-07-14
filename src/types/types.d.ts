@@ -3,9 +3,11 @@ namespace UW {
         latitude: string;
         longitude: string;
         days?: string;
+        fields?: string;
     }
     /** The return data format of the UW API. */
     type Data = {
+        [key: string]: number | Date | string;
         //floating point to 6dp
         latitude: number;
         //floating point to 6dp
@@ -105,6 +107,9 @@ namespace UW {
         get(): Promise<Data[]>;
     }
     interface IDataOptimiser {
-        optimise(data: Array<Data[]>): Data[];
+        get(data: Array<Data[]>): Data[];
+    }
+    interface IDataFieldFilter {
+        get(data: Data[]): Data[];
     }
 }
