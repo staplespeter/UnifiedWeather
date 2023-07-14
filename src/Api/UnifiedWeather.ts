@@ -16,7 +16,10 @@ export default class UnifiedWeather {
 
     async init() {
         await this.configurationManager.load('./config/sources.config.json');
-        this.sources = this.factory.create(this.configurationManager);        
+        this.sources = this.factory.create(this.configurationManager);
+        if (this.sources.length === 0) {
+            throw new Error('No data sources found');
+        }
     }
 
     async get(params: UW.QueryParams): Promise<UW.Data[]> {
