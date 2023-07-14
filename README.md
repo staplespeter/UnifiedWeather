@@ -6,9 +6,9 @@ Demo weather aggregator
 
 >clone main branch
 
->npm install
+>node>npm install
 
->npm run deploy
+>node>npm run deploy
 
 go to
 
@@ -33,4 +33,4 @@ Example:
 http://localhost:25025/uw/?latitude=54.607868&longitude=-5.926437&days=5&temperatureUnit=F&windspeedUnit=kph&fields=latitude,longitude,temperature,temperatureUnit,windSpeed
 
 #Test
->npm run test
+>node>npm run test
