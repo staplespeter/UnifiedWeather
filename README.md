@@ -9,8 +9,11 @@ Demo weather aggregator
 >npm install
 
 >npm run deploy
+
 go to
+
 >http://localhost:25025/uw/
+
 with query params
 
 #Query params
