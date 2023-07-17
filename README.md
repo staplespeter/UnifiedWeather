@@ -2,7 +2,8 @@
 Demo weather aggregator
 
 #To use
->install node
+>install node & npm
+>https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 
 >clone main branch
 
